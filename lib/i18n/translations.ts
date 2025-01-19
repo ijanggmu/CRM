@@ -1,0 +1,66 @@
+export const translations = {
+  en: {
+    header: {
+      title: 'Project Connectivity',
+      language: 'Language',
+    },
+    login: {
+      title: 'Welcome Back',
+      subtitle: 'Sign in to your account',
+      email: 'Email',
+      emailPlaceholder: 'Enter your email',
+      password: 'Password',
+      passwordPlaceholder: 'Enter your password',
+      rememberMe: 'Remember me',
+      forgotPassword: 'Forgot password?',
+      loginButton: 'Sign In',
+      loading: 'Signing in...',
+      errors: {
+        emailRequired: 'Email is required',
+        emailInvalid: 'Please enter a valid email',
+        passwordRequired: 'Password is required',
+      },
+    },
+    twoFactor: {
+      title: 'Two-Factor Authentication',
+      subtitle: 'Enter the verification code sent to your device',
+      code: 'Verification Code',
+      codePlaceholder: '000000',
+      verify: 'Verify Code',
+      verifying: 'Verifying...',
+      resend: 'Resend Code',
+    },
+  },
+  ne: {
+    header: {
+      title: 'प्रोजेक्ट कनेक्टिभिटी',
+      language: 'भाषा',
+    },
+    login: {
+      title: 'फेरि स्वागत छ',
+      subtitle: 'आफ्नो खातामा साइन इन गर्नुहोस्',
+      email: 'इमेल',
+      emailPlaceholder: 'आफ्नो इमेल प्रविष्ट गर्नुहोस्',
+      password: 'पासवर्ड',
+      passwordPlaceholder: 'आफ्नो पासवर्ड प्रविष्ट गर्नुहोस्',
+      rememberMe: 'मलाई सम्झनुहोस्',
+      forgotPassword: 'पासवर्ड बिर्सनुभयो?',
+      loginButton: 'साइन इन गर्नुहोस्',
+      loading: 'साइन इन गर्दै...',
+      errors: {
+        emailRequired: 'इमेल आवश्यक छ',
+        emailInvalid: 'कृपया मान्य इमेल प्रविष्ट गर्नुहोस्',
+        passwordRequired: 'पासवर्ड आवश्यक छ',
+      },
+    },
+    twoFactor: {
+      title: 'दुई-कारक प्रमाणीकरण',
+      subtitle: 'तपाईंको उपकरणमा पठाइएको प्रमाणीकरण कोड प्रविष्ट गर्नुहोस्',
+      code: 'प्रमाणीकरण कोड',
+      codePlaceholder: '000000',
+      verify: 'कोड प्रमाणित गर्नुहोस्',
+      verifying: 'प्रमाणित गर्दै...',
+      resend: 'कोड पुन: पठाउनुहोस्',
+    },
+  },
+};
