@@ -1,71 +1,38 @@
 'use client';
 
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import { LeadsDataTable } from '@/components/leads/leads-table';
+import { LeadDialog } from '@/components/leads/lead-dialog';
 import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Search, UserPlus } from 'lucide-react';
-
-const leads = [
-  {
-    id: 1,
-    name: 'Sarah Johnson',
-    source: 'Website',
-    status: 'New',
-    assignedTo: 'John Smith',
-    lastContact: '2024-03-20',
-  },
-  // Add more mock data as needed
-];
+import { Plus } from 'lucide-react';
+import { useLeads } from '@/hooks/use-leads';
+import { LoadingSpinner } from '@/components/layout/loading';
 
 export default function LeadsPage() {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { isLoading } = useLeads();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <LoadingSpinner className="h-8 w-8" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Leads</h1>
-        <Button>
-          <UserPlus className="mr-2 h-4 w-4" />
+        <Button onClick={() => setIsDialogOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
           Add Lead
         </Button>
       </div>
       
-      <Card>
-        <CardHeader>
-          <CardTitle>Lead Management</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex gap-4 mb-6">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search leads..." className="pl-9" />
-            </div>
-            <Button variant="outline">Filter</Button>
-          </div>
-          
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Source</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Assigned To</TableHead>
-                <TableHead>Last Contact</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {leads.map((lead) => (
-                <TableRow key={lead.id}>
-                  <TableCell>{lead.name}</TableCell>
-                  <TableCell>{lead.source}</TableCell>
-                  <TableCell>{lead.status}</TableCell>
-                  <TableCell>{lead.assignedTo}</TableCell>
-                  <TableCell>{lead.lastContact}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <LeadsDataTable />
+      <LeadDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
     </div>
   );
 }
