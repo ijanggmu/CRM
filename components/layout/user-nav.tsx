@@ -6,10 +6,7 @@ import {
   User,
   Settings,
   LogOut,
-  Bell,
-  Mail,
   Calendar,
-  MessageSquare,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -41,7 +38,7 @@ export function UserNav() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar>
-            <AvatarImage src="/placeholder-avatar.jpg" alt="User" />
+            <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="User" />
             <AvatarFallback>JD</AvatarFallback>
           </Avatar>
         </Button>
@@ -55,21 +52,12 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push('/profile')}>
             <User className="mr-2 h-4 w-4" />
             Profile
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Calendar className="mr-2 h-4 w-4" />
-            Calendar
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <MessageSquare className="mr-2 h-4 w-4" />
-            Messages
-            <DropdownMenuShortcut>⌘M</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push('/settings')}>
             <Settings className="mr-2 h-4 w-4" />
             Settings
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
