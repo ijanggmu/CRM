@@ -1,73 +1,85 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import { useState } from 'react';
+import { DataTable } from '@/components/common/data-table';
+import { PolicyDialog } from '@/components/policies/policy-dialog';
 import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Search, FileText } from 'lucide-react';
-
-const policies = [
-  {
-    id: 'POL001',
-    customer: 'John Doe',
-    type: 'Auto Insurance',
-    premium: '$150/month',
-    status: 'Active',
-    expiryDate: '2025-03-15',
-  },
-  // Add more mock data as needed
-];
+import { Plus } from 'lucide-react';
+import { usePolicies } from '@/hooks/use-policies';
+import { LoadingSpinner } from '@/components/layout/loading';
+import { type ColumnDef } from '@tanstack/react-table';
+import { Badge } from '@/components/ui/badge';
 
 export default function PoliciesPage() {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { policies, isLoading, deletePolicy } = usePolicies();
+
+  const columns: ColumnDef<any>[] = [
+    {
+      accessorKey: 'id',
+      header: 'Policy ID',
+    },
+    {
+      accessorKey: 'customer',
+      header: 'Customer',
+      cell: ({ row }) => <div className="font-medium">{row.getValue('customer')}</div>,
+    },
+    {
+      accessorKey: 'type',
+      header: 'Type',
+    },
+    {
+      accessorKey: 'premium',
+      header: 'Premium',
+      cell: ({ row }) => (
+        <div className="font-medium text-right">{row.getValue('premium')}</div>
+      ),
+    },
+    {
+      accessorKey: 'status',
+      header: 'Status',
+      cell: ({ row }) => (
+        <Badge variant={row.getValue('status') === 'Active' ? 'success' : 'secondary'}>
+          {row.getValue('status')}
+        </Badge>
+      ),
+    },
+    {
+      accessorKey: 'expiryDate',
+      header: 'Expiry Date',
+      cell: ({ row }) => {
+        const date = new Date(row.getValue('expiryDate'));
+        return <div>{date.toLocaleDateString()}</div>;
+      },
+    },
+  ];
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <LoadingSpinner className="h-8 w-8" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Policies</h1>
-        <Button>
-          <FileText className="mr-2 h-4 w-4" />
+        <Button onClick={() => setIsDialogOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
           New Policy
         </Button>
       </div>
       
-      <Card>
-        <CardHeader>
-          <CardTitle>Policy Management</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex gap-4 mb-6">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search policies..." className="pl-9" />
-            </div>
-            <Button variant="outline">Filter</Button>
-          </div>
-          
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Policy ID</TableHead>
-                <TableHead>Customer</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Premium</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Expiry Date</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {policies.map((policy) => (
-                <TableRow key={policy.id}>
-                  <TableCell>{policy.id}</TableCell>
-                  <TableCell>{policy.customer}</TableCell>
-                  <TableCell>{policy.type}</TableCell>
-                  <TableCell>{policy.premium}</TableCell>
-                  <TableCell>{policy.status}</TableCell>
-                  <TableCell>{policy.expiryDate}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <DataTable
+        data={policies}
+        columns={columns}
+        moduleType="policies"
+        onDelete={deletePolicy}
+      />
+      
+      <PolicyDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
     </div>
   );
 }

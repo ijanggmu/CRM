@@ -1,73 +1,93 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import { useState } from 'react';
+import { DataTable } from '@/components/common/data-table';
+import { ClaimDialog } from '@/components/claims/claim-dialog';
 import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Search, FileText } from 'lucide-react';
-
-const claims = [
-  {
-    id: 'CLM001',
-    customer: 'John Doe',
-    type: 'Auto Insurance',
-    amount: '$2,500',
-    status: 'Pending',
-    submittedDate: '2024-03-15',
-  },
-  // Add more mock data as needed
-];
+import { Plus } from 'lucide-react';
+import { useClaims } from '@/hooks/use-claims';
+import { LoadingSpinner } from '@/components/layout/loading';
+import { type ColumnDef } from '@tanstack/react-table';
+import { Badge } from '@/components/ui/badge';
 
 export default function ClaimsPage() {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { claims, isLoading, deleteClaim } = useClaims();
+
+  const columns: ColumnDef<any>[] = [
+    {
+      accessorKey: 'id',
+      header: 'Claim ID',
+    },
+    {
+      accessorKey: 'customer',
+      header: 'Customer',
+      cell: ({ row }) => <div className="font-medium">{row.getValue('customer')}</div>,
+    },
+    {
+      accessorKey: 'type',
+      header: 'Type',
+    },
+    {
+      accessorKey: 'amount',
+      header: 'Amount',
+      cell: ({ row }) => (
+        <div className="font-medium text-right">{row.getValue('amount')}</div>
+      ),
+    },
+    {
+      accessorKey: 'status',
+      header: 'Status',
+      cell: ({ row }) => {
+        const status = row.getValue('status') as string;
+        return (
+          <Badge variant={
+            status === 'Pending' ? 'default' :
+            status === 'Approved' ? 'success' :
+            status === 'Under Review' ? 'secondary' :
+            'outline'
+          }>
+            {status}
+          </Badge>
+        );
+      },
+    },
+    {
+      accessorKey: 'submittedDate',
+      header: 'Submitted Date',
+      cell: ({ row }) => {
+        const date = new Date(row.getValue('submittedDate'));
+        return <div>{date.toLocaleDateString()}</div>;
+      },
+    },
+  ];
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <LoadingSpinner className="h-8 w-8" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Claims</h1>
-        <Button>
-          <FileText className="mr-2 h-4 w-4" />
+        <Button onClick={() => setIsDialogOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
           New Claim
         </Button>
       </div>
       
-      <Card>
-        <CardHeader>
-          <CardTitle>Claims Management</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex gap-4 mb-6">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search claims..." className="pl-9" />
-            </div>
-            <Button variant="outline">Filter</Button>
-          </div>
-          
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Claim ID</TableHead>
-                <TableHead>Customer</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Submitted Date</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {claims.map((claim) => (
-                <TableRow key={claim.id}>
-                  <TableCell>{claim.id}</TableCell>
-                  <TableCell>{claim.customer}</TableCell>
-                  <TableCell>{claim.type}</TableCell>
-                  <TableCell>{claim.amount}</TableCell>
-                  <TableCell>{claim.status}</TableCell>
-                  <TableCell>{claim.submittedDate}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <DataTable
+        data={claims}
+        columns={columns}
+        moduleType="claims"
+        onDelete={deleteClaim}
+      />
+      
+      <ClaimDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
     </div>
   );
 }
