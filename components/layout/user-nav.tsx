@@ -2,11 +2,14 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTheme } from 'next-themes';
 import {
   User,
   Settings,
   LogOut,
-  Calendar,
+  Sun,
+  Moon,
+  Laptop,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -15,8 +18,11 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
+  DropdownMenuShortcut,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -24,6 +30,7 @@ import { LoadingSpinner } from './loading';
 
 export function UserNav() {
   const router = useRouter();
+  const { theme, setTheme } = useTheme();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogout = async () => {
@@ -62,6 +69,35 @@ export function UserNav() {
             Settings
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
           </DropdownMenuItem>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
+              {theme === 'dark' ? (
+                <Moon className="mr-2 h-4 w-4" />
+              ) : theme === 'system' ? (
+                <Laptop className="mr-2 h-4 w-4" />
+              ) : (
+                <Sun className="mr-2 h-4 w-4" />
+              )}
+              Theme
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              <DropdownMenuItem onClick={() => setTheme('light')}>
+                <Sun className="mr-2 h-4 w-4" />
+                Light
+                {theme === 'light' && <DropdownMenuShortcut>✓</DropdownMenuShortcut>}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme('dark')}>
+                <Moon className="mr-2 h-4 w-4" />
+                Dark
+                {theme === 'dark' && <DropdownMenuShortcut>✓</DropdownMenuShortcut>}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme('system')}>
+                <Laptop className="mr-2 h-4 w-4" />
+                System
+                {theme === 'system' && <DropdownMenuShortcut>✓</DropdownMenuShortcut>}
+              </DropdownMenuItem>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="text-red-600" onClick={handleLogout} disabled={isLoading}>
