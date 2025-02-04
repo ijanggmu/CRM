@@ -95,7 +95,7 @@ export function DataTable<TData>({
       ? [
           {
             id: 'actions',
-            cell: ({ row }) => {
+            cell: ({ row }: { row: { original: TData } }) => {
               const item = row.original;
               return (
                 <DropdownMenu>

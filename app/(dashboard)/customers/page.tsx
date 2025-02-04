@@ -5,7 +5,7 @@ import { DataTable } from '@/components/common/data-table';
 import { CustomerDialog } from '@/components/customers/customer-dialog';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-import { useCustomers } from '@/hooks/use-customers';
+import { Customer, useCustomers } from '@/hooks/use-customers';
 import { LoadingSpinner } from '@/components/layout/loading';
 import { type ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
@@ -14,7 +14,7 @@ export default function CustomersPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { customers, isLoading, deleteCustomer } = useCustomers();
 
-  const columns: ColumnDef<any>[] = [
+  const columns: ColumnDef<Customer>[] = [
     {
       accessorKey: 'name',
       header: 'Name',
@@ -41,7 +41,7 @@ export default function CustomersPage() {
       accessorKey: 'status',
       header: 'Status',
       cell: ({ row }) => (
-        <Badge variant={row.getValue('status') === 'Active' ? 'success' : 'secondary'}>
+        <Badge variant={row.getValue('status') === 'Active' ? 'destructive' : 'secondary'}>
           {row.getValue('status')}
         </Badge>
       ),
@@ -66,11 +66,11 @@ export default function CustomersPage() {
         </Button>
       </div>
       
-      <DataTable
+      <DataTable<Customer>
         data={customers}
         columns={columns}
         moduleType="customers"
-        onDelete={deleteCustomer}
+        onDelete={(customer)=>deleteCustomer(customer.id)}
       />
       
       <CustomerDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />

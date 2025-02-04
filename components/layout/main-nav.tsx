@@ -10,7 +10,7 @@ import { usePathname } from 'next/navigation';
 import { getMenuItems, type MenuItem } from '@/lib/api/menu';
 import { LoadingSpinner } from './loading';
 
-const iconMap: Record<string, LucideIcon> = {
+const iconMap: Record<string, typeof LucideIcon> = {
   BarChart3,
   Users,
   UserPlus,

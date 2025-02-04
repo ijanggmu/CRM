@@ -79,7 +79,7 @@ export function LeadsDataTable() {
           <Badge variant={
             status === 'New' ? 'default' :
             status === 'Contacted' ? 'secondary' :
-            status === 'Qualified' ? 'success' :
+            status === 'Qualified' ? 'destructive' :
             'outline'
           }>
             {status}

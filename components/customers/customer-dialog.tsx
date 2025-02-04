@@ -37,6 +37,7 @@ const customerFormSchema = z.object({
   email: z.string().email('Invalid email address'),
   phone: z.string().min(10, 'Phone number must be at least 10 characters'),
   status: z.enum(['Active', 'Inactive']),
+  policies: z.number().min(0, 'Policies must be a non-negative number'),
 });
 
 interface CustomerDialogProps {
@@ -54,8 +55,8 @@ export function CustomerDialog({ open, onOpenChange, customer }: CustomerDialogP
     defaultValues: {
       name: customer?.name || '',
       email: customer?.email || '',
-      phone: customer?.phone || '',
       status: (customer?.status as any) || 'Active',
+      policies: customer?.policies || 0,
     },
   });
 

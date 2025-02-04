@@ -5,7 +5,7 @@ import { DataTable } from '@/components/common/data-table';
 import { PolicyDialog } from '@/components/policies/policy-dialog';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-import { usePolicies } from '@/hooks/use-policies';
+import { Policy, usePolicies } from '@/hooks/use-policies';
 import { LoadingSpinner } from '@/components/layout/loading';
 import { type ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
@@ -14,7 +14,7 @@ export default function PoliciesPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { policies, isLoading, deletePolicy } = usePolicies();
 
-  const columns: ColumnDef<any>[] = [
+  const columns: ColumnDef<Policy>[] = [
     {
       accessorKey: 'id',
       header: 'Policy ID',
@@ -39,7 +39,7 @@ export default function PoliciesPage() {
       accessorKey: 'status',
       header: 'Status',
       cell: ({ row }) => (
-        <Badge variant={row.getValue('status') === 'Active' ? 'success' : 'secondary'}>
+        <Badge variant={row.getValue('status') === 'Active' ? 'destructive' : 'secondary'}>
           {row.getValue('status')}
         </Badge>
       ),
@@ -72,12 +72,12 @@ export default function PoliciesPage() {
         </Button>
       </div>
       
-      <DataTable
-        data={policies}
-        columns={columns}
-        moduleType="policies"
-        onDelete={deletePolicy}
-      />
+      <DataTable<Policy>
+          data={policies}
+          columns={columns}
+          moduleType="policies"
+          onDelete={(policy) => deletePolicy(policy.id)}
+/>
       
       <PolicyDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
     </div>

@@ -5,16 +5,17 @@ import { DataTable } from '@/components/common/data-table';
 import { ClaimDialog } from '@/components/claims/claim-dialog';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-import { useClaims } from '@/hooks/use-claims';
+import { Claim, useClaims } from '@/hooks/use-claims';
 import { LoadingSpinner } from '@/components/layout/loading';
 import { type ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
+import { Policy } from '@/hooks/use-policies';
 
 export default function ClaimsPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { claims, isLoading, deleteClaim } = useClaims();
 
-  const columns: ColumnDef<any>[] = [
+  const columns: ColumnDef<Claim>[] = [
     {
       accessorKey: 'id',
       header: 'Claim ID',
@@ -80,12 +81,12 @@ export default function ClaimsPage() {
         </Button>
       </div>
       
-      <DataTable
+      <DataTable<Claim>
         data={claims}
         columns={columns}
         moduleType="claims"
-        onDelete={deleteClaim}
-      />
+        onDelete={(claim) => deleteClaim(claim.id)}
+        />
       
       <ClaimDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
     </div>

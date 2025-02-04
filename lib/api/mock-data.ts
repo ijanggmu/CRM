@@ -1,3 +1,5 @@
+import { Task } from "@/hooks/use-tasks";
+
 // Mock data store
 let customers = [
     {
@@ -36,7 +38,7 @@ let customers = [
     // Add more mock policies...
   ];
   
-  let tasks = [
+  let tasks:Task [] = [
     {
       id: '1',
       title: 'Review pending claims',
