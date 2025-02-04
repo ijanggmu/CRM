@@ -43,7 +43,7 @@ export default function ClaimsPage() {
         return (
           <Badge variant={
             status === 'Pending' ? 'default' :
-            status === 'Approved' ? 'success' :
+            status === 'Approved' ? 'destructive' :
             status === 'Under Review' ? 'secondary' :
             'outline'
           }>
